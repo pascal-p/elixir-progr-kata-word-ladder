@@ -1,0 +1,2 @@
+defmodule WordLadder do
+end
