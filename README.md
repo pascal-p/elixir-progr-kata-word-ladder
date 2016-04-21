@@ -1,6 +1,8 @@
 # WordLadder
 
-**TODO: Add description**
+Exlixir (cont'ed)
+  WIP
+  
 
 ## Installation
 
