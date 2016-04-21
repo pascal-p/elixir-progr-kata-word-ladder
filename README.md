@@ -1,6 +1,6 @@
 # WordLadder
 
-Exlixir (cont'ed)
+Elixir (cont'ed)
   WIP
   
 
