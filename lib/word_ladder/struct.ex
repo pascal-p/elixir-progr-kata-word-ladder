@@ -17,10 +17,8 @@ defmodule WordLadder.Struct do
 
   def dequeue(ds = %WordLadder.Struct{}) do
     {q_item, nq} = :queue.out(WordLadder.Struct.get_q(ds))
-    # update current queue
-    %WordLadder.Struct{ds | queue: nq}
-    # return, the dequeue item
-    elem(q_item, 1)
+    # %WordLadder.Struct{ds | queue: nq} # update current queue
+    {elem(q_item, 1), %WordLadder.Struct{ds | queue: nq}}  # return tuple
   end
 
   def empty_queue?(ds = %WordLadder.Struct{}) do
@@ -28,7 +26,7 @@ defmodule WordLadder.Struct do
   end
 
   def enqueue(ds = %WordLadder.Struct{}, item) do
-    nq = :queue.in(item, WordLadder.Struct.get_q(ds))
+    nq = :queue.in(item, WordLadder.Struct.get_q(ds)) #
     %WordLadder.Struct{ds | queue: nq}
   end
 
@@ -39,7 +37,7 @@ defmodule WordLadder.Struct do
 
   def add_to_pred(ds = %WordLadder.Struct{}, k, v) do
     %WordLadder.Struct{ds |
-                       pred: Map.put(WordLadder.Struct.get_visited(ds), k, v)}
+                       pred: Map.put(WordLadder.Struct.get_pred(ds), k, v)}
   end
 
 end
