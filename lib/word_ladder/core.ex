@@ -69,8 +69,7 @@ defmodule WordLadder.Core do
   defp _get_path(nil, _, lr), do: lr
 
   defp _get_path(word, pred, lr) do
-    # _get_path(Map.get(pred, word), pred, [word | lr])
-    _get_path(pred.word, pred, [word | lr])
+    _get_path(Map.get(pred, word), pred, [word | lr])
   end
 
   defp _main(start_word, end_word) do
