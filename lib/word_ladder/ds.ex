@@ -2,46 +2,47 @@ defmodule WordLadder.DS do
   #
   defstruct queue: :queue.new(), visited: %{}, pred: %{}
 
-  def get_visited(ds = %WordLadder.DS{}), do: ds.visited
+  def get_visited(ds), do: ds.visited
 
-  def already_visited?(ds = %WordLadder.DS{}, k), do: ds.visited[k]
+  def already_visited?(ds, k), do: ds.visited[k]
 
-  def get_pred(ds = %WordLadder.DS{}), do: ds.pred
+  def get_pred(ds), do: ds.pred
 
-  def get_q(ds = %WordLadder.DS{}), do: ds.queue
+  def get_q(ds), do: ds.queue
 
-  def dequeue(ds = %WordLadder.DS{}) do
-    {q_item, nq} = :queue.out(WordLadder.DS.get_q(ds))
+  def dequeue(ds) do
+    {q_item, nq} = :queue.out(ds.queue)
     {elem(q_item, 1), %WordLadder.DS{ds | queue: nq}}  # return tuple
   end
 
-  def enqueue(ds = %WordLadder.DS{}, item) do
-    nq = :queue.in(item, WordLadder.DS.get_q(ds)) #
+  def enqueue(ds, item) do
+    nq = :queue.in(item, ds.queue) #
     %WordLadder.DS{ds | queue: nq}
   end
 
-  def empty_queue?(ds = %WordLadder.DS{}), do: :queue.is_empty(WordLadder.DS.get_q(ds))
+  def empty_queue?(ds), do: :queue.is_empty(WordLadder.DS.get_q(ds))
 
-  def add_to_visited(ds = %WordLadder.DS{}, k, v \\ true) do
+  def add_to_visited(ds, k, v \\ true) do
     %WordLadder.DS{ds |
-                       visited: Map.put(WordLadder.DS.get_visited(ds), k, v)}
+                   visited: Map.put(ds.visited, k, v)}
   end
 
   #
   # predecessor of k is v
   #
-  def add_to_pred(ds = %WordLadder.DS{}, k, v) do
+  def add_to_pred(ds, k, v) do
     %WordLadder.DS{ds |
-                   pred: Map.put(WordLadder.DS.get_pred(ds), k, v)}
+                   pred: Map.put(ds.pred, k, v)}
   end
 
   #
   # for convenience
   #
-  def update(ds = %WordLadder.DS{}, cword, pword) do
+  def update(ds, cword, pword) do
     %WordLadder.DS{ds |
-                   pred: Map.put(WordLadder.DS.get_pred(ds), cword, pword),
-                   queue: :queue.in(cword, WordLadder.DS.get_q(ds)),
-                   visited: Map.put(WordLadder.DS.get_visited(ds), cword, true)}
+                   pred: Map.put(ds.pred, cword, pword),
+                   queue: :queue.in(cword, ds.queue),
+                   visited: Map.put(ds.visited, cword, true)}
   end
+
 end

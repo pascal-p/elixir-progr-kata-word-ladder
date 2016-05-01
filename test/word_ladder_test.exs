@@ -27,8 +27,7 @@ defmodule WordLadderTest do
   expect "cat -> dog - found a path", context  do
    {:ok, list} = WordLadder.Core.main_alt(context[:dict], "cat", "dog")
    assert list == ["cat", "cot", "cog", "dog"]
-   # ["cat", "cot", "dot", "dog"]
-   # =>  expect cat -> dog - found a path (261468.7ms) /OK
+   # could be: ["cat", "cot", "dot", "dog"]
   end
 
   expect "cat -> dyg - NOT found", context  do
@@ -43,34 +42,61 @@ defmodule WordLadderTest do
     #   * expect man -> god (164125.9ms)
   end
 
-  # expect "head -> tail", context do
-  #   {:ok, list} = WordLadder.Core.main_alt(context[:dict], "head", "tail")
-  #   assert list == ["head", "tead", "teal", "taal", "tail"]
-  # end
+  expect "head -> tail", context do
+    {:ok, list} = WordLadder.Core.main_alt(context[:dict], "head", "tail")
+    assert list == ["head", "heal", "heil", "hail", "tail"]
+    # ["head", "tead", "teal", "taal", "tail"]
+  end
 
-  # expect "milk -> wine", context do
-  #   {:ok, list} = WordLadder.Core.main_alt(context[:dict], "milk", "wine")
-  #   assert list == ["milk", "mink", "wink", "wine"]
-  # end
+  expect "milk -> wine", context do
+    {:ok, list} = WordLadder.Core.main_alt(context[:dict], "milk", "wine")
+    assert list == ["milk", "mile", "mine", "wine"]
+    # could be: ["milk", "mink", "wink", "wine"]
+  end
 
-  # expect "cold -> warm", context do
-  #   {:ok, list} = WordLadder.Core.main_alt(context[:dict], "cold", "warm")
-  #   assert list == ["cold", "wold", "wald", "ward", "warm"]
-  # end
+  expect "cold -> warm", context do
+    {:ok, list} = WordLadder.Core.main_alt(context[:dict], "cold", "warm")
+    assert list == ["cold", "cord", "card", "ward", "warm"]
+    # could be: ["cold", "wold", "wald", "ward", "warm"]
+  end
 
-  # expect "sleep -> dream", context do
-  #   {:ok, list} = WordLadder.Core.main_alt(context[:dict], "sleep", "dream")
-  #   assert list == ["sleep", "bleep", "bleed", "breed", "dreed", "dread", "dream"]
-  # end
+  expect "sleep -> dream", context do
+    {:ok, list} = WordLadder.Core.main_alt(context[:dict], "sleep", "dream")
+    assert list == ["sleep", "bleep", "bleed", "breed", "bread", "bream", "dream"]
+    # could be: ["sleep", "bleep", "bleed", "breed", "dreed", "dread", "dream"]
+  end
 
-  # expect "door -> lock", context do
-  #   {:ok, list} = WordLadder.Core.main_alt(context[:dict], "door", "lock")
-  #   assert list == ["door", "loor", "look", "lock"]
-  # end
+  expect "door -> lock", context do
+    {:ok, list} = WordLadder.Core.main_alt(context[:dict], "door", "lock")
+    assert list == ["door", "dook", "dock", "lock"]
+    # could be: ["door", "loor", "look", "lock"]
+  end
 
-  # expect "word -> gene", context do
-  #   {:ok, list} = WordLadder.Core.main_alt(context[:dict], "word", "gene")
-  #   assert list == ["word", "wore", "gore", "gere", "gene"]
-  # end
+  expect "word -> gene", context do
+    {:ok, list} = WordLadder.Core.main_alt(context[:dict], "word", "gene")
+    assert list == ["word", "wore", "gore", "gere", "gene"]
+  end
 
 end
+
+# >	mix test --trace
+# Compiled lib/word_ladder/ds.ex
+# Compiled lib/word_ladder/core.ex
+#
+# WordLadderTest
+#   * expect cold -> warm (883154.7ms)
+#   * expect sleep -> dream (327923.6ms)
+#   * expect milk -> wine (108603.9ms)
+#   * expect door -> lock (71773.7ms)
+#   * expect head -> tail (322417.6ms)
+#   * expect cat -> dog - found a path (230474.7ms)
+#   * expect cat -> dyg - NOT found (389954.5ms)
+#   * expect man -> god (146009.4ms)
+#   * expect word -> gene (737136.3ms)
+#
+#
+# Finished in 3219.9 seconds (0.09s on load, 3219.9s on tests)
+# 9 tests, 0 failures
+#
+# Randomized with seed 878335
+#

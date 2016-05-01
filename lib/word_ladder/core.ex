@@ -16,6 +16,14 @@ defmodule WordLadder.Core do
   end
 
   # == Private ==
+  defp _main(start_word, end_word) do
+    {res, pred} = bfs(start_word, end_word)
+    if res == :ok do
+      {:ok, get_path(end_word, pred)}
+    else
+      {:ko, nil}
+    end
+  end
 
   #
   # Generates a list of all valid candidates of word by changing only 1 letter
@@ -36,32 +44,41 @@ defmodule WordLadder.Core do
 
   defp bfs(start_word, end_word) do
     ds = %DS{ queue: :queue.new(),
-              visited: %{start_word => true} }
+              visited: %{start_word => true}, pred: %{start_word => nil} }
     DS.enqueue(ds, start_word) |>
       process(end_word) # return ds
   end
 
+  #
+  # if the word to process is the end_word, work is done
+  # otherwise, generate all the candidates for word and process
+  # them
+  #
   defp process(ds, end_word) do
     { word, ds } = DS.dequeue(ds)
     cond do
       word == end_word -> {:ok, DS.get_pred(ds)}
       true ->
-        ds = gen_candidates(word) |> process_w(word, ds)
+        ds = gen_candidates(word) |> process_w(word, ds) # side-effect on ds
         if DS.empty_queue?(ds) do
           {:ko, nil}
         else
-          process(ds, end_word)
+          process(ds, end_word) # rec. call but TCO applied, with new (updated) ds
         end
     end
   end
 
+  #
+  # Processing all the candidates for word
+  #
   defp process_w([], _, ds), do: ds
 
   defp process_w([cword | cdr], word, ds) do
     unless DS.already_visited?(ds, cword) do
       ds = DS.update(ds, cword, word) # side-effect on ds
+      # \__ update pred of cword, enqueue cword (for later proc.) and mark cword has visited
     end
-    process_w(cdr, word, ds)
+    process_w(cdr, word, ds) # rec. call but TCO applied
   end
 
   defp get_path(word, pred), do: _get_path(word, pred, [])
@@ -69,16 +86,7 @@ defmodule WordLadder.Core do
   defp _get_path(nil, _, lr), do: lr
 
   defp _get_path(word, pred, lr) do
-    _get_path(Map.get(pred, word), pred, [word | lr])
-  end
-
-  defp _main(start_word, end_word) do
-    {res, pred} = bfs(start_word, end_word)
-    if res == :ok do
-      {:ok, get_path(end_word, pred)}
-    else
-      {:ko, nil}
-    end
+    _get_path(pred[word], pred, [word | lr])
   end
 
 end
